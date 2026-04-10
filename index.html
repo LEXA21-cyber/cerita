@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>✨ Buat Kamu Cerita ✨</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(145deg, #ffb7c5 0%, #ff8c9e 30%, #e0aaff 100%);
+    font-family: 'Segoe UI', 'Quicksand', system-ui, 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .heart-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0.3;
+    animation: floatHeart 12s infinite ease-in-out;
+    user-select: none;
+  }
+
+  @keyframes floatHeart {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0.2; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-20vh) rotate(20deg); opacity: 0; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 250, 245, 0.95);
+    backdrop-filter: blur(2px);
+    border-radius: 48px;
+    padding: 25px 22px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, #c1285e, #ff6f91, #b34180);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 5px;
+  }
+
+  .sub {
+    color: #b94b6f;
+    font-weight: 500;
+    margin-bottom: 18px;
+    font-size: 0.85rem;
+  }
+
+  .avatar {
+    font-size: 3rem;
+    margin-bottom: 5px;
+  }
+
+  /* Mood Selection */
+  .mood-section {
+    margin: 15px 0;
+  }
+
+  .mood-title {
+    font-size: 0.85rem;
+    color: #b94b6f;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .mood-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .mood-btn {
+    background: #ffe4ec;
+    border: 1.5px solid #ffbfd0;
+    border-radius: 40px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #b3416e;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mood-btn.active {
+    background: linear-gradient(135deg, #ff5e8e, #ff3b6f);
+    border-color: #ff5e8e;
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 59, 111, 0.4);
+  }
+
+  .mood-btn:hover {
+    transform: scale(0.96);
+    background: #ffd0dc;
+  }
+
+  textarea {
+    width: 100%;
+    height: 120px;
+    border-radius: 28px;
+    border: 1.5px solid #ffbfd0;
+    background: #fffef7;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    margin-top: 12px;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: #ff88aa;
+    box-shadow: 0 0 0 3px rgba(255,105,150,0.2);
+  }
+
+  button {
+    margin-top: 12px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 60px;
+    background: linear-gradient(95deg, #ff5e8e, #ff3b6f);
+    color: white;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.25s;
+    box-shadow: 0 6px 14px rgba(199, 48, 88, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: inherit;
+  }
+
+  button:hover {
+    transform: scale(0.97);
+  }
+
+  .btn-ig {
+    background: linear-gradient(95deg, #833AB4, #E4405F, #FD1D1D);
+    box-shadow: 0 6px 14px rgba(131, 58, 180, 0.3);
+    margin-top: 10px;
+  }
+
+  .response {
+    margin-top: 18px;
+    background: rgba(255, 245, 240, 0.95);
+    border-radius: 28px;
+    padding: 16px;
+    text-align: left;
+    border-left: 5px solid #ff6b8b;
+    font-size: 14px;
+    color: #2d1b23;
+  }
+
+  .response p {
+    margin: 6px 0;
+  }
+
+  .response-name {
+    font-weight: 800;
+    color: #cc3366;
+    background: #ffeef2;
+    padding: 2px 12px;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    display: inline-block;
+  }
+
+  .typing {
+    font-style: italic;
+    color: #b95c7a;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+
+  .dot-floating {
+    display: inline-block;
+    animation: blink 1.2s infinite;
+  }
+
+  .preview-box {
+    margin-top: 12px;
+    background: #fff0f3;
+    border-radius: 18px;
+    padding: 8px;
+    font-size: 11px;
+    color: #a13e5e;
+  }
+
+  footer {
+    font-size: 9px;
+    margin-top: 15px;
+    color: #be7890;
+  }
+</style>
+</head>
+<body>
+
+<div class="heart-bg" id="heartBg"></div>
+
+<div class="container">
+  <div class="avatar">🎭💌</div>
+  <h2>Cerita Kita</h2>
+  <div class="sub">pilih suasana hatimu dulu ya</div>
+
+  <!-- Pilihan Suasana Hati -->
+  <div class="mood-section">
+    <div class="mood-title">🌙 Bagaimana perasaanmu hari ini?</div>
+    <div class="mood-grid" id="moodGrid">
+      <div class="mood-btn" data-mood="senang">😊 Senang</div>
+      <div class="mood-btn" data-mood="sedih">🥺 Sedih</div>
+      <div class="mood-btn" data-mood="rindu">💕 Rindu</div>
+      <div class="mood-btn" data-mood="lelah">😴 Lelah/Capek</div>
+      <div class="mood-btn" data-mood="marah">😤 Marah/Kesal</div>
+      <div class="mood-btn" data-mood="biasa">😌 Biasa Aja</div>
+    </div>
+  </div>
+
+  <textarea id="story" placeholder="Tulis cerita atau perasaanmu di sini..."></textarea>
+
+  <button id="sendBtn">
+    💕 Kirim Cerita 💕
+  </button>
+
+  <div class="response" id="response">
+    <p>🌸 <em>Pilih suasana hati dan tulis ceritamu...</em> 🌸</p>
+  </div>
+
+  <button id="copyToIgBtn" class="btn-ig">
+    📲 Salin Cerita → Kirim ke IG DM
+  </button>
+
+  <div class="preview-box" id="previewMsg">
+    💡 Pilih mood ➜ tulis cerita ➜ dapat balasan sesuai perasaanmu ➜ salin cerita ➜ kirim ke IG
+  </div>
+
+  <footer>ceritamu didengar • balasan dari hati</footer>
+</div>
+
+<script>
+  // Floating hearts
+  function createHearts() {
+    const bg = document.getElementById('heartBg');
+    for (let i = 0; i < 40; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = ['❤️', '💖', '💗', '💓', '💕', '🌸', '✨', '💘', '🌹'][Math.floor(Math.random() * 9)];
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = Math.random() * 28 + 12 + 'px';
+      heart.style.animationDuration = Math.random() * 8 + 7 + 's';
+      heart.style.animationDelay = Math.random() * 10 + 's';
+      bg.appendChild(heart);
+    }
+  }
+  createHearts();
+
+  // Variabel
+  let selectedMood = "biasa";
+  let lastStory = "";
+  let currentReplyHtml = "";
+
+  const namaPanggilan = ["Sayangku", "Cantikkkuu", "My Baby Girl", "My Moon", "Imuppp", "Cintaaa", "My Home", "MyLove"];
+
+  // ========== BALASAN BERDASARKAN MOOD ==========
+  function getReplyByMood(mood, cerita) {
+    const lowerStory = cerita.toLowerCase();
+    
+    const replies = {
+      senang: [
+        "Seneng banget denger kamu happy! 😊 Semogaaa kamu terus bahagiaa yaa sayanggg,aku ikut bahagia kalo kamu bahagia cintaaa💛",
+        "Uwisss benarkahh sayangg??seru bangett tuhh pastii,aku ikut seneng denger nyaa hehehe 🎉💖",
+        "Kalo kamu senyum bahagia,dunia juga ikut tersenyum lebar tauuu,bahagia terus yaa cintakuuu✨"
+      ],
+      sedih: [
+        "Aku di sini buat kamu... nangis gapapa, tapi ingat kamu nggak sendirian. Aku bakal temenin sampai senyummu balik lagi 🫂💙",
+        "Sedih itu wajar, sayang. Tapi jangan berlama-lama ya, karena kamu kuat dan berharga. Aku percaya kamu bisa lewatin ini 🤍",
+        "Utututu Peluk jauhh sayanggg,ceritain semuanya ke akuu yaa,kamu bisa luapin semua perasaan kamu ke akuu 🌧️🌈"
+      ],
+      rindu: [
+        "Aku juga kangen banget sama kamu 😢💕 Pengen rasanya langsung ketemu, ngobrol ngalor-ngidul sampai lupa waktu.Semoga kita cepet ketemu yaa 🤗",
+        "Rindu ini berat, tapi indah. Karena artinya kita punya seseorang yang berharga di hati. Aku sayang kamu 💖",
+        "Jangan terlalu larut dalam rindu ya. Pikirkan saat kita ketemu nanti, pasti seru! Aku juga nggak sabar 🥰✨"
+      ],
+      lelah: [
+        "Capek ya hari ini? Istirahat dulu yang cukup. Kamu hebat sudah bertahan sejauh ini. Aku bangga sama kamu 💪🤍",
+        "Tubuh dan hati perlu rehat. Jangan paksakan diri. Aku selalu mendukungmu dari sini. Semangat, sayang! 🌙",
+        "Lelah itu tanda kamu sudah berusaha maksimal. Besok baru lanjut lagi, sekarang istirahat dulu. Aku di sini nemenin 🛌💤"
+      ],
+      marah: [
+        "Wajar kok kalau lagi kesal. Tapi jangan biarkan emosi menguasai kamu, ya. Aku selalu siap dengerin curhatanmu 🫶😤",
+        "Coba tarik napas dulu... hembuskan pelan-pelan. Aku tahu kamu bisa meredakan ini. Cerita aja semuanya ke aku 🤍",
+        "Marah itu manusiawi. Tapi ingat, kamu lebih kuat dari amarahmu. Aku di sini buat ngedukung kamu selalu 💪🔥"
+      ],
+      biasa: [
+        "Hari biasa tapi bersama kamu jadi istimewa. Ada yang mau diceritain? Aku dengerin kok 💙",
+        "Kadang hari biasa adalah anugerah. Nikmati aja dulu, nanti kita bikin seru bareng-bareng 😊✨",
+        "Biasa aja gapapa, yang penting kamu sehat dan tetap tersenyum. Aku sayang kamu 💕"
+      ]
+    };
+
+    // Pilih balasan random sesuai mood, atau fallback
+    let moodReplies = replies[mood] || replies.biasa;
+    let balasan = moodReplies[Math.floor(Math.random() * moodReplies.length)];
+    
+    // Deteksi kata kunci tambahan untuk memperkuat
+    if (lowerStory.includes("capek") || lowerStory.includes("lelah")) {
+      balasan = "😴 Istirahat yang cukup ya sayang. Kamu hebat sudah berusaha hari ini. Aku selalu support kamu! 🤍";
+    } else if (lowerStory.includes("rindu") || lowerStory.includes("kangen")) {
+      balasan = "💕 Rindu itu berat, tapi indah. Aku juga kangen banget sama kamu. Semoga cepat ketemu ya! 🌙✨";
+    } else if (lowerStory.includes("sedih") || lowerStory.includes("kecewa")) {
+      balasan = "🥺 Aku ikut sedih dengarnya. Tapi ingat, kamu nggak sendirian. Aku di sini buat kamu. Peluk erat! 🤍";
+    } else if (lowerStory.includes("senang") || lowerStory.includes("happy")) {
+      balasan = "😊 Senyummu adalah sinar terindah hari ini. Terus bahagia ya sayang! 💛";
+    }
+    
+    return balasan;
+  }
+
+  // Typing effect
+  function typeEffect(element, finalHtml, speed = 18) {
+    element.innerHTML = '<span class="typing">✍️ sedang membaca ceritamu <span class="dot-floating">.</span><span class="dot-floating">.</span><span class="dot-floating">.</span></span>';
+    let i = 0;
+    const plainText = finalHtml.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '');
+    let accumulated = '';
+    
+    const interval = setInterval(() => {
+      if (i < plainText.length) {
+        accumulated += plainText[i];
+        element.innerHTML = `<span class="typing">✍️ ${accumulated}</span>`;
+        i++;
+      } else {
+        clearInterval(interval);
+        element.innerHTML = finalHtml;
+      }
+    }, speed);
+  }
+
+  // Kirim cerita dengan balasan sesuai mood
+  function kirimCerita() {
+    const cerita = document.getElementById("story").value.trim();
+    const responseDiv = document.getElementById("response");
+    const sendButton = document.getElementById("sendBtn");
+
+    if (cerita === "") {
+      typeEffect(responseDiv, `<p>💌 <strong>Halo sayang...</strong> cerita sedikit aja, aku kangen denger suara hatimu 🤍</p>`);
+      return;
+    }
+
+    lastStory = cerita;
+    sendButton.disabled = true;
+    sendButton.style.opacity = "0.7";
+    sendButton.innerText = "💞 Menyentuh hati... 💞";
+
+    const randomName = namaPanggilan[Math.floor(Math.random() * namaPanggilan.length)];
+    const balasan = getReplyByMood(selectedMood, cerita);
+    
+    const finalMessage = `
+      <p><span class="response-name">💌 ${randomName}</span></p>
+      <p>✨ ${balasan}</p>
+      <p style="margin-top:10px; font-size:11px; border-top: 1px dashed #ffbfd0; padding-top:8px;">🤍 <em>Cerita kamu sampai ke hatiku... terima kasih sudah berbagi.</em></p>
+    `;
+    
+    currentReplyHtml = finalMessage;
+    
+    setTimeout(() => {
+      typeEffect(responseDiv, finalMessage, 18);
+      
+      const previewDiv = document.getElementById("previewMsg");
+      previewDiv.innerHTML = "✅ <strong>Balasan sesuai mood sudah siap!</strong> Klik tombol pink di bawah untuk menyalin CERITA ASLI ke IG 💕";
+      previewDiv.style.background = "#ffe0e8";
+      
+      setTimeout(() => {
+        sendButton.disabled = false;
+        sendButton.style.opacity = "1";
+        sendButton.innerText = "💕 Kirim Cerita 💕";
+      }, 1800);
+    }, 80);
+  }
+
+  // Copy HANYA CERITA ASLI ke IG
+  function copyOnlyStory() {
+    if (lastStory === "") {
+      const previewDiv = document.getElementById("previewMsg");
+      previewDiv.innerHTML = "⚠️ <strong>Belum ada cerita!</strong> Tulis cerita dan pilih mood dulu ya 💖";
+      previewDiv.style.background = "#ffe0e0";
+      setTimeout(() => {
+        previewDiv.innerHTML = "💡 Pilih mood ➜ tulis cerita ➜ dapat balasan sesuai perasaanmu ➜ salin cerita ➜ kirim ke IG";
+        previewDiv.style.background = "#fff0f3";
+      }, 2500);
+      return;
+    }
+    
+    const messageForIG = `📖 *Cerita untukmu:*\n\n${lastStory}\n\n━━━━━━━━━━━━━━━━\n✨ dari aku buat kamu • jawab yaa 💕`;
+    
+    navigator.clipboard.writeText(messageForIG).then(() => {
+      const previewDiv = document.getElementById("previewMsg");
+      previewDiv.innerHTML = "✅ <strong>Cerita berhasil disalin!</strong> Sekarang buka Instagram → DM → paste → kirim 💖✨";
+      previewDiv.style.background = "#d9f0e6";
+      setTimeout(() => {
+        previewDiv.innerHTML = "💡 Pilih mood ➜ tulis cerita ➜ dapat balasan sesuai perasaanmu ➜ salin cerita ➜ kirim ke IG";
+        previewDiv.style.background = "#fff0f3";
+      }, 4000);
+      
+      const btn = document.getElementById("copyToIgBtn");
+      btn.style.transform = "scale(0.96)";
+      setTimeout(() => { btn.style.transform = "scale(1)"; }, 200);
+    }).catch(() => {
+      alert("Gagal menyalin, coba izinkan clipboard.");
+    });
+  }
+
+  // ========== EVENT LISTENERS ==========
+  // Pilihan mood
+  const moodBtns = document.querySelectorAll('.mood-btn');
+  moodBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      moodBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedMood = btn.getAttribute('data-mood');
+      
+      // Feedback kecil
+      const moodNames = {
+        senang: "😊 Senang", sedih: "🥺 Sedih", rindu: "💕 Rindu",
+        lelah: "😴 Lelah", marah: "😤 Marah", biasa: "😌 Biasa"
+      };
+      const previewDiv = document.getElementById("previewMsg");
+      previewDiv.innerHTML = `🎭 Mood: ${moodNames[selectedMood]} dipilih! Sekarang tulis ceritamu ✍️`;
+      previewDiv.style.background = "#ffe0e8";
+      setTimeout(() => {
+        if (previewDiv.innerHTML.includes("dipilih")) {
+          previewDiv.innerHTML = "💡 Pilih mood ➜ tulis cerita ➜ dapat balasan sesuai perasaanmu ➜ salin cerita ➜ kirim ke IG";
+          previewDiv.style.background = "#fff0f3";
+        }
+      }, 2000);
+    });
+  });
+
+  // Set default mood "biasa" aktif
+  document.querySelector('[data-mood="biasa"]').classList.add('active');
+  
+  document.getElementById("sendBtn").addEventListener("click", kirimCerita);
+  document.getElementById("copyToIgBtn").addEventListener("click", copyOnlyStory);
+  
+  // Enter shortcut
+  const textarea = document.getElementById("story");
+  textarea.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      kirimCerita();
+    }
+  });
+</script>
+</body>
+</html>
